@@ -1,21 +1,51 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add Employee</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <script>
+      function validateForm(event) {
+        const employeeID = document.getElementById("EmployeeID").value.trim();
+        const employeeName = document
+          .getElementById("EmployeeName")
+          .value.trim();
+        const salary = document.getElementById("Salary").value.trim();
+        const address = document.getElementById("Address").value.trim();
+        let errors = [];
+
+        if (!employeeID) errors.push("Employee ID is required.");
+        if (!employeeName) errors.push("Employee Name is required.");
+        if (!salary || isNaN(salary) || salary <= 0)
+          errors.push("Salary must be a positive number.");
+        if (!address) errors.push("Address is required.");
+
+        if (errors.length > 0) {
+          alert(errors.join("\\n"));
+          event.preventDefault();
+        }
+      }
+    </script>
   </head>
   <body>
     <h1>Add Employee</h1>
-    <form action="/add" method="POST">
-      <label for="EmployeeID">ID:</label>
-      <input type="text" name="EmployeeID" required /><br />
-      <label for="EmployeeName">Name:</label>
-      <input type="text" name="EmployeeName" required /><br />
+    <% if (errors && errors.length > 0) { %>
+    <ul>
+      <% errors.forEach(error => { %>
+      <li style="color: red"><%= error %></li>
+      <% }); %>
+    </ul>
+    <% } %>
+    <form action="/add" method="POST" onsubmit="validateForm(event)">
+      <label for="EmployeeID">Employee ID:</label>
+      <input type="text" id="EmployeeID" name="EmployeeID" /><br />
+      <label for="EmployeeName">Employee Name:</label>
+      <input type="text" id="EmployeeName" name="EmployeeName" /><br />
       <label for="Salary">Salary:</label>
-      <input type="number" name="Salary" required /><br />
+      <input type="number" id="Salary" name="Salary" /><br />
       <label for="Address">Address:</label>
-      <input type="text" name="Address" required /><br />
-      <button type="submit">Add</button>
+      <input type="text" id="Address" name="Address" /><br />
+      <button type="submit">Add Employee</button>
     </form>
   </body>
 </html>
